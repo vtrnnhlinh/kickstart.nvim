@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -189,7 +189,10 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.api.nvim_set_keymap('n', '<C-c><C-b>', ':Neotree toggle<CR>', { noremap = true, silent = true })
 
+-- Map Ctrl+` to cd to the current file's directory, split window, open terminal, and enter insert mode
+vim.api.nvim_set_keymap('n', '<C-`>', ':cd %:h<CR>:split<CR>:term<CR>i', { noremap = true, silent = true })
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -258,6 +261,60 @@ require('lazy').setup({
     },
   },
 
+  {
+    'glepnir/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+        theme = 'doom', -- You can change the theme here
+        config = {
+          header = {
+            '',
+            '      ___           ___           ___           ___           ___           ___     ',
+            '     /\\__\\         /\\  \\         /\\  \\         /\\  \\         /\\  \\         /\\  \\    ',
+            '    /::|  |       /::\\  \\       /::\\  \\       /::\\  \\       /::\\  \\       /::\\  \\   ',
+            '   /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:/\\ \\  \\     /:/\\ \\  \\     /:/\\:\\  \\  ',
+            '  /:/|:|__|__   /:/  \\:\\  \\   /::\\~\\:\\  \\   _\\:\\~\\ \\  \\   _\\:\\~\\ \\  \\   /::\\~\\:\\  \\ ',
+            ' /:/ |::::\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /\\ \\:\\ \\ \\__\\ /\\ \\:\\ \\ \\__\\ /:/\\:\\ \\:\\__\\',
+            ' \\/__/~~/:/  / \\:\\  \\ /:/  / \\/__\\:\\/:/  / \\:\\ \\:\\ \\/__/ \\:\\ \\:\\ \\/__/ \\/__\\:\\/:/  /',
+            '       /:/  /   \\:\\  /:/  /       \\::/  /   \\:\\ \\:\\__\\    \\:\\ \\:\\__\\        \\::/  / ',
+            '      /:/  /     \\:\\/:/  /        /:/  /     \\:\\/:/  /     \\:\\/:/  /        /:/  /  ',
+            '     /:/  /       \\::/  /        /:/  /       \\::/  /       \\::/  /        /:/  /   ',
+            '     \\/__/         \\/__/         \\/__/         \\/__/         \\/__/         \\/__/    ',
+            '',
+          },
+          center = {
+            {
+              icon = ' 󰄛  ',
+              desc = 'Recently opened files                   ',
+              action = 'Telescope oldfiles',
+              key = 'r',
+            },
+            {
+              icon = '   ',
+              desc = 'Find File                               ',
+              action = 'Telescope find_files',
+              key = 'f',
+            },
+            {
+              icon = '   ',
+              desc = 'Find word                               ',
+              action = 'Telescope live_grep',
+              key = 'w',
+            },
+            {
+              icon = '   ',
+              desc = 'Open Personal dotfiles                  ',
+              action = 'Telescope dotfiles path=~/.dotfiles',
+              key = 'd',
+            },
+          },
+          footer = { 'Have a nice day!' }, -- Footer message
+        },
+      }
+    end,
+    requires = { 'nvim-telescope/telescope.nvim' },
+  },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -873,12 +930,12 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
